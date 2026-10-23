@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxipic - حجز تاكسي</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 400px; background: #fff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { font-size: 24px; font-weight: bold; color: #5b2c6f; }
+        .btn-pi-auth { background: #673ab7; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; }
+        .input-group { background: #f8f9fa; border-radius: 12px; padding: 12px; margin-bottom: 15px; border: 1px solid #e9ecef; }
+        .input-item { display: flex; align-items: center; margin-bottom: 8px; }
+        .input-item:last-child { margin-bottom: 0; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; margin-left: 10px; }
+        .green { background: #2ecc71; }
+        .red { background: #e74c3c; }
+        input { border: none; background: transparent; width: 100%; outline: none; font-size: 15px; }
+        .btn-confirm { width: 100%; background: #f39c12; color: #fff; border: none; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <div class="logo">Taxipic 🚕</div>
+        <button class="btn-pi-auth" onclick="onPiSignIn()">Pi Sign-In</button>
+    </div>
+
+    <div class="input-group">
+        <div class="input-item">
+            <span class="dot green"></span>
+            <input type="text" placeholder="موقع الانطلاق (منين؟)">
+        </div>
+        <hr style="border: 0.5px solid #eee; margin: 8px 0;">
+        <div class="input-item">
+            <span class="dot red"></span>
+            <input type="text" placeholder="الوجهة (إلى أين؟)">
+        </div>
+    </div>
+
+    <button class="btn-confirm">تأكيد الحجز والدفع بـ Pi</button>
+</div>
+
+</body>
+</html>
