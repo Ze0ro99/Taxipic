@@ -3,187 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Welcome </title>
+    <title>Taxipic</title>
+    <!-- روابط التصميم أو الخطوط إذا وجدت -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            box-sizing: border-box;
+        /* يمكنك وضع التنسيقات هنا أو في ملف CSS خارجي */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-
-        body {
-            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #fff;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Background animated light effects */
-        .bg-glow {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: linear-gradient(135deg, rgba(162, 107, 98, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-            filter: blur(80px);
-            border-radius: 50%;
-            top: -100px;
-            right: -100px;
-            z-index: 1;
-        }
-
         .container {
-            position: relative;
-            z-index: 2;
-            width: 90%;
-            max-width: 450px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 40px 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
         }
-
-        /* Header Elements: Menu and Button */
-        .header-row {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .pi-signin-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .pi-signin-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .language-menu {
-            display: flex;
-            gap: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 6px 12px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .lang-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
-        }
-
-        .lang-option.active {
-            opacity: 1;
-        }
-
-        .lang-option img {
-            width: 24px;
-            height: 16px;
-            border-radius: 3px;
-            object-fit: cover;
-        }
-
-        .lang-option span {
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* Logo Area - Centered and Larger */
         .logo-area {
             text-align: center;
-            margin: 20px 0 50px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 20px 0;
         }
-
         .logo-img {
-            max-width: 280px;
-            width: 100%;
+            max-width: 150px;
             height: auto;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
         }
-
-        /* Search / Input Field */
         .search-bar {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 16px 20px;
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .search-bar:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .search-bar i {
-            color: #a26b62;
-            font-size: 1.2rem;
-        }
-
-        .search-bar span {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 1rem;
+            gap: 10px;
+            margin-top: 20px;
         }
     </style>
-    <!-- FontAwesome for the search icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-
     <main class="container">
-        <!-- Header Row: Pi Sign In and Languages -->
-        <div class="header-row">
-            <button class="pi-signin-btn">Pi Sign-In</button>
-            
-            <div class="language-menu">
-                <div class="lang-option active">
-                    <img src="https://flagcdn.com/sa.svg" alt="AR">
-                    <span>AR</span>
-                </div>
-                <div class="lang-option">
-                    <img src="https://flagcdn.com/fr.svg" alt="FR">
-                    <span>FR</span>
-                </div>
-                <div class="lang-option">
-                    <img src="https://flagcdn.com/gb.svg" alt="EN">
-                    <span>EN</span>
-                </div>
+        <!-- قائمة اللغات أو العناصر الأخرى إن وجدت -->
+        <div class="language-menu">
+            <div class="lang-option active">
+                <img src="https://flagcdn.com/sa.svg" alt="AR" width="20">
+                <span>AR</span>
+            </div>
+            <div class="lang-option">
+                <img src="https://flagcdn.com/fr.svg" alt="FR" width="20">
+                <span>FR</span>
+            </div>
+            <div class="lang-option">
+                <img src="https://flagcdn.com/gb.svg" alt="EN" width="20">
+                <span>EN</span>
             </div>
         </div>
 
@@ -192,6 +63,9 @@
             <img src="logo-taxi.png" alt="Taxipic Logo" class="logo-img">
         </div>
 
+        <!-- Map Container -->
+        <div id="map" style="width: 100%; height: 250px; border-radius: 16px; margin-top: 20px; border: 1px solid rgba(255, 255, 255, 0.1);"></div>
+
         <!-- Search Bar -->
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -199,5 +73,6 @@
         </div>
     </main>
 
+    <script src="map.js"></script>
 </body>
 </html>
