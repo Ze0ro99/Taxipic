@@ -4,45 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taxipic - حجز تاكسي</title>
+    <!-- Pi SDK -->
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 400px; background: #fff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: bold; color: #5b2c6f; }
-        .btn-pi-auth { background: #673ab7; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; }
-        .input-group { background: #f8f9fa; border-radius: 12px; padding: 12px; margin-bottom: 15px; border: 1px solid #e9ecef; }
-        .input-item { display: flex; align-items: center; margin-bottom: 8px; }
-        .input-item:last-child { margin-bottom: 0; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; margin-left: 10px; }
-        .green { background: #2ecc71; }
-        .red { background: #e74c3c; }
-        input { border: none; background: transparent; width: 100%; outline: none; font-size: 15px; }
-        .btn-confirm { width: 100%; background: #f39c12; color: #fff; border: none; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3); }
-    </style>
-</head>
-<body>
+        :root {
+            --primary: #5b2c6f;
+            --primary-light: #7b3b93;
+            --accent: #f39c12;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-muted: #7f8c8d;
+        }
 
-<div class="app-container">
-    <div class="header">
-        <div class="logo">Taxipic 🚕</div>
-        <button class="btn-pi-auth" onclick="onPiSignIn()">Pi Sign-In</button>
-    </div>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    <div class="input-group">
-        <div class="input-item">
-            <span class="dot green"></span>
-            <input type="text" placeholder="موقع الانطلاق (منين؟)">
-        </div>
-        <hr style="border: 0.5px solid #eee; margin: 8px 0;">
-        <div class="input-item">
-            <span class="dot red"></span>
-            <input type="text" placeholder="الوجهة (إلى أين؟)">
-        </div>
-    </div>
+        body {
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
 
-    <button class="btn-confirm">تأكيد الحجز والدفع بـ Pi</button>
-</div>
+        .app-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(91, 44, 111, 0.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-</body>
-</html>
+        /* Header Style */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            background: #fff;
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: 700
