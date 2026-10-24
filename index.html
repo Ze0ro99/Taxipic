@@ -4,12 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taxipic</title>
+    
+    <!-- Importation des polices Google Fonts (Cairo pour l'Arabe, Inter pour FR/EN) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* La nouvelle typographie est appliquée ici */
+            font-family: 'Cairo', 'Inter', sans-serif;
         }
 
         body {
@@ -92,6 +102,7 @@
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -133,203 +144,3 @@
             display: flex; align-items: center; gap: 15px; cursor: pointer;
         }
         .search-bar:hover { background: rgba(255, 255, 255, 0.08); }
-        .search-bar i { color: #a26b62; font-size: 1.2rem; }
-        .search-bar span { color: rgba(255, 255, 255, 0.4); }
-
-        /* Login View Specifics */
-        h2 { text-align: center; margin-bottom: 30px; font-size: 1.5rem; font-weight: 600; }
-        .input-group { margin-bottom: 20px; }
-        .input-group input {
-            width: 100%; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px; padding: 14px; color: #fff;
-            font-size: 1rem; outline: none; transition: border-color 0.3s;
-        }
-        .input-group input:focus { border-color: #a26b62; }
-        
-        .divider { text-align: center; margin: 10px 0 20px; position: relative; }
-        .divider::before, .divider::after {
-            content: ''; position: absolute; top: 50%; width: 40%;
-            height: 1px; background: rgba(255, 255, 255, 0.1);
-        }
-        .divider::before { right: 0; } .divider::after { left: 0; }
-        .divider span { color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; padding: 0 10px; }
-
-        .register-link { text-align: center; margin-top: 20px; font-size: 0.9rem; }
-        .register-link a { color: #a26b62; text-decoration: none; font-weight: 600; }
-        .register-link a:hover { text-decoration: underline; }
-
-        /* Utilitaires pour cacher/afficher */
-        .hidden { display: none !important; }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-
-    <div class="bg-glow"></div>
-
-    <main class="container">
-        
-        <!-- HEADER PARTAGÉ : Bouton d'action à gauche, Langues à droite -->
-        <div class="header-row">
-            <!-- Ce bouton changera selon la vue (soit "Sign in", soit "Retour") -->
-            <button class="btn-small" id="top-action-btn">تسجيل الدخول عبر Pi</button>
-            
-            <!-- Sélecteur de langue -->
-            <div class="language-menu">
-                <div class="lang-option active">
-                    <img src="https://flagcdn.com/sa.svg" alt="AR"><span>AR</span>
-                </div>
-                <div class="lang-option">
-                    <img src="https://flagcdn.com/fr.svg" alt="FR"><span>FR</span>
-                </div>
-                <div class="lang-option">
-                    <img src="https://flagcdn.com/gb.svg" alt="EN"><span>EN</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= VUE 1 : ACCUEIL ================= -->
-        <div id="home-view">
-            <div class="logo-area">
-                <img src="logo-taxi.png" alt="Taxipic Logo" class="logo-img">
-            </div>
-            <div class="search-bar">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <span id="search-text">بحث</span>
-            </div>
-        </div>
-
-        <!-- ================= VUE 2 : CONNEXION (Cachée par défaut) ================= -->
-        <div id="login-view" class="hidden">
-            <h2 id="page-title">تسجيل دخول المستخدم</h2>
-            
-            <div class="input-group">
-                <input type="text" id="email-input" placeholder="البريد الإلكتروني أو رقم الهاتف">
-            </div>
-            <div class="input-group">
-                <input type="password" id="password-input" placeholder="كلمة المرور">
-            </div>
-
-            <button class="btn btn-primary" id="login-btn">تسجيل الدخول</button>
-
-            <div class="divider"><span id="or-text">أو</span></div>
-
-            <button class="btn btn-pi" id="pi-btn">تسجيل الدخول عبر Pi</button>
-
-            <div class="register-link">
-                <a href="#" id="register-text">ليس لديك حساب؟ إنشاء حساب</a>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Script de gestion des vues et des langues -->
-    <script>
-        // 1. Les traductions pour TOUTE l'application
-        const translations = {
-            'AR': {
-                topActionHome: 'تسجيل الدخول عبر Pi',
-                topActionLogin: '➔ رجوع',
-                search: 'بحث',
-                title: 'تسجيل دخول المستخدم',
-                email: 'البريد الإلكتروني أو رقم الهاتف',
-                password: 'كلمة المرور',
-                login: 'تسجيل الدخول',
-                or: 'أو',
-                pi: 'تسجيل الدخول عبر Pi',
-                register: 'ليس لديك حساب؟ إنشاء حساب',
-                dir: 'rtl'
-            },
-            'FR': {
-                topActionHome: 'Connexion Pi',
-                topActionLogin: '➔ Retour',
-                search: 'Rechercher',
-                title: 'Accès Utilisateur',
-                email: 'E-mail ou Numéro',
-                password: 'Mot de passe',
-                login: 'Se connecter',
-                or: 'OU',
-                pi: 'Connexion Pi',
-                register: 'Pas de compte ? Créer un compte',
-                dir: 'ltr'
-            },
-            'EN': {
-                topActionHome: 'Pi Sign-In',
-                topActionLogin: '➔ Back',
-                search: 'Search',
-                title: 'User Access',
-                email: 'Email or Phone Number',
-                password: 'Password',
-                login: 'Login',
-                or: 'OR',
-                pi: 'Pi Sign-In',
-                register: 'Don\'t have an account? Sign up',
-                dir: 'ltr'
-            }
-        };
-
-        // Variables pour gérer l'état
-        let currentLang = 'AR';
-        let isHomeView = true;
-
-        // Sélection des éléments HTML
-        const htmlTag = document.documentElement;
-        const langOptions = document.querySelectorAll('.lang-option');
-        const topActionBtn = document.getElementById('top-action-btn');
-        const homeView = document.getElementById('home-view');
-        const loginView = document.getElementById('login-view');
-
-        // Fonction pour mettre à jour tout le texte
-        function updateText() {
-            const data = translations[currentLang];
-            
-            // Direction et attribut de langue
-            htmlTag.setAttribute('dir', data.dir);
-            htmlTag.setAttribute('lang', currentLang.toLowerCase());
-
-            // Bouton en haut (change selon si on est sur Accueil ou Connexion)
-            topActionBtn.innerText = isHomeView ? data.topActionHome : data.topActionLogin;
-
-            // Textes Accueil
-            document.getElementById('search-text').innerText = data.search;
-
-            // Textes Connexion
-            document.getElementById('page-title').innerText = data.title;
-            document.getElementById('email-input').placeholder = data.email;
-            document.getElementById('password-input').placeholder = data.password;
-            document.getElementById('login-btn').innerText = data.login;
-            document.getElementById('or-text').innerText = data.or;
-            document.getElementById('pi-btn').innerText = data.pi;
-            document.getElementById('register-text').innerText = data.register;
-        }
-
-        // Action : Changer de langue
-        langOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                langOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-                currentLang = this.querySelector('span').innerText;
-                updateText(); // On met à jour les textes
-            });
-        });
-
-        // Action : Cliquer sur le bouton en haut à gauche/droite
-        topActionBtn.addEventListener('click', function() {
-            if (isHomeView) {
-                // Aller vers la page Connexion
-                homeView.classList.add('hidden');
-                loginView.classList.remove('hidden');
-                isHomeView = false;
-            } else {
-                // Retourner à l'Accueil
-                loginView.classList.add('hidden');
-                homeView.classList.remove('hidden');
-                isHomeView = true;
-            }
-            updateText(); // Pour changer le texte du bouton ("Sign In" <=> "Retour")
-        });
-
-    </script>
-</body>
-</html>
