@@ -20,7 +20,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          // VOTRE CLÉ PUBLIQUE EMAILJS
+          // VOTRE CLÉ PUBLIQUE EMAILJS EST LÀ :
           emailjs.init("qpFqoExr3hVCfHkIs"); 
        })();
     </script>
@@ -78,10 +78,14 @@
         /* Home View */
         .logo-area { text-align: center; margin: 10px 0 40px 0; }
         .logo-img { max-width: 250px; width: 100%; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4)); }
-        .search-bar { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; }
-        .search-bar:hover { background: rgba(255, 255, 255, 0.08); }
-        .search-bar i { color: #a26b62; font-size: 1.2rem; }
-        .search-bar span { color: rgba(255, 255, 255, 0.4); font-weight: 500; }
+        
+        .search-bar { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.3s; }
+        .search-bar:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 204, 0, 0.3); }
+        
+        /* LA COULEUR JAUNE TAXI POUR LA LOUPE EST ICI 👇 */
+        .search-bar i { color: #FFCC00; font-size: 1.3rem; filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.4)); }
+        
+        .search-bar span { color: rgba(255, 255, 255, 0.5); font-weight: 500; font-size: 1.05rem; }
 
         /* Forms */
         h2 { text-align: center; margin-bottom: 20px; font-size: 1.4rem; font-weight: 700; }
@@ -127,6 +131,7 @@
             <div class="logo-area">
                 <img src="logo-taxi.png" alt="Taxipic Logo" class="logo-img">
             </div>
+            <!-- LOUPE ET BARRE DE RECHERCHE -->
             <div class="search-bar" id="open-map-btn">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <span id="search-text-ui">بحث عن سيارة أجرة...</span>
@@ -307,7 +312,7 @@
                 user_role: currentRole
             };
 
-            // VOS CLÉS EMAILJS SONT INTÉGRÉES ICI (Service ID et Template ID)
+            // VOTRE IDENTIFIANT DE SERVICE EST LÀ :
             emailjs.send('service_ebeqht9', 'vt97o33', templateParams)
                 .then(function(response) {
                     statusMsg.innerText = data.statusSuccess; statusMsg.style.color = "#4CAF50";
