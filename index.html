@@ -16,13 +16,13 @@
     <!-- Leaflet CSS (Pour la carte interactive) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <!-- EmailJS SDK pour l'envoi direct de mail -->
+    <!-- IMPORTATION DE EMAILJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-        (function() {
-            // Remplacez 'YOUR_PUBLIC_KEY' par votre clé publique EmailJS
-            emailjs.init("YOUR_PUBLIC_KEY");
-        })();
+       (function(){
+          // 🔴 1. REMPLACEZ "VOTRE_CLE_PUBLIQUE_ICI" PAR VOTRE VRAIE CLÉ PUBLIQUE EMAILJS
+          emailjs.init("VOTRE_CLE_PUBLIQUE_ICI"); 
+       })();
     </script>
 
     <style>
@@ -36,7 +36,7 @@
 
         .bg-glow {
             position: absolute; width: 600px; height: 600px;
-            background: linear-gradient(135deg, rgba(245, 176, 65, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(162, 107, 98, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
             filter: blur(80px); border-radius: 50%; top: -100px; right: -100px; z-index: 1;
         }
 
@@ -56,73 +56,54 @@
         .lang-option img { width: 22px; height: 15px; border-radius: 3px; object-fit: cover; }
         .lang-option span { font-size: 0.7rem; font-weight: 600; }
 
-        /* Buttons (Couleurs Jaune Taxi) */
+        /* Buttons */
         .btn-small { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
         .btn-small:hover { background: rgba(255, 255, 255, 0.2); }
-        .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s ease; margin-bottom: 15px; }
-        .btn-primary { background: #f5b041; color: #111; }
-        .btn-primary:hover { background: #eb984e; }
+        .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s ease; margin-bottom: 15px; }
+        .btn-primary { background: #a26b62; color: #fff; }
+        .btn-primary:hover { background: #8a574f; }
         .btn-pi { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* Toggle Switch Client / Conducteur */
-        .role-toggle {
-            display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px; margin-bottom: 20px; padding: 5px; gap: 5px;
+        /* Role Selector */
+        .role-selector {
+            display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; margin-bottom: 20px; overflow: hidden;
         }
         .role-btn {
-            flex: 1; padding: 10px; background: transparent; border: none; border-radius: 8px;
-            color: rgba(255, 255, 255, 0.5); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;
+            flex: 1; padding: 12px; background: transparent; border: none; color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.3s ease;
         }
-        .role-btn:hover { color: #fff; }
-        .role-btn.active { background: #f5b041; color: #111; box-shadow: 0 4px 10px rgba(245, 176, 65, 0.3); }
+        .role-btn.active { background: rgba(255, 255, 255, 0.1); color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
 
         /* Home View */
         .logo-area { text-align: center; margin: 10px 0 40px 0; }
         .logo-img { max-width: 250px; width: 100%; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4)); }
         .search-bar { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .search-bar:hover { background: rgba(255, 255, 255, 0.08); }
-        .search-bar i { color: #f5b041; font-size: 1.2rem; }
+        .search-bar i { color: #a26b62; font-size: 1.2rem; }
         .search-bar span { color: rgba(255, 255, 255, 0.4); font-weight: 500; }
 
-        /* Form Views */
-        h2 { text-align: center; margin-bottom: 25px; font-size: 1.4rem; font-weight: 700; }
-        
-        .input-group { position: relative; margin-bottom: 15px; }
-        .input-group input { 
-            width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-radius: 12px; padding: 14px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; 
-        }
-        .input-group input:focus { border-color: #f5b041; }
-        
-        /* Icône mot de passe dynamique (RTL/LTR) */
-        .password-toggle {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5); cursor: pointer; transition: color 0.3s;
-            font-size: 1.1rem;
-        }
-        .password-toggle:hover { color: #f5b041; }
-        
-        html[dir="rtl"] .password-toggle { left: 15px; }
-        html[dir="ltr"] .password-toggle { right: 15px; }
-        html[dir="rtl"] .input-group input.password-field { padding-left: 45px; }
-        html[dir="ltr"] .input-group input.password-field { padding-right: 45px; }
+        /* Forms */
+        h2 { text-align: center; margin-bottom: 20px; font-size: 1.4rem; font-weight: 700; }
+        .input-group { margin-bottom: 15px; }
+        .input-group input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        .input-group input:focus { border-color: #a26b62; }
         
         .divider { text-align: center; margin: 10px 0 20px; position: relative; }
         .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 35%; height: 1px; background: rgba(255, 255, 255, 0.1); }
         .divider::before { right: 0; } .divider::after { left: 0; }
         .divider span { color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; padding: 0 10px; font-weight: 500; }
         .link-text { text-align: center; margin-top: 10px; font-size: 0.9rem; }
-        .link-text a { color: #f5b041; text-decoration: none; font-weight: 600; cursor: pointer; }
+        .link-text a { color: #a26b62; text-decoration: none; font-weight: 600; cursor: pointer; }
 
-        /* Status message styling */
-        .status-msg { text-align: center; font-size: 0.85rem; margin-top: 10px; font-weight: 600; }
-
-        /* Map View */
+        /* Map */
         .map-wrapper { width: 100%; height: 280px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 15px; position: relative; }
         #leaflet-map { width: 100%; height: 100%; background: #000; }
         .taxi-marker { font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); animation: bounce 2s infinite ease-in-out; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
         .hidden { display: none !important; }
+        .status-msg { text-align: center; font-size: 0.9rem; font-weight: 600; margin-top: 10px; padding: 0 10px;}
     </style>
 </head>
 <body>
@@ -158,30 +139,25 @@
             <button class="btn btn-primary" id="locate-btn" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
                 <i class="fa-solid fa-location-crosshairs"></i> <span id="locate-text">تحديد موقعي</span>
             </button>
-            <div class="map-wrapper">
-                <div id="leaflet-map"></div>
-            </div>
-            <p id="map-status" style="text-align: center; color: #f5b041; font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;"></p>
+            <div class="map-wrapper"><div id="leaflet-map"></div></div>
+            <p id="map-status" class="status-msg"></p>
         </div>
 
         <!-- ================= VUE 3 : CONNEXION ================= -->
         <div id="login-view" class="hidden">
             <h2 id="login-title">تسجيل دخول المستخدم</h2>
             
-            <div class="role-toggle">
-                <button class="role-btn active" id="btn-login-client">دخول العميل</button>
-                <button class="role-btn" id="btn-login-driver">دخول السائق</button>
+            <div class="role-selector">
+                <button type="button" class="role-btn active" id="login-role-client">عميل</button>
+                <button type="button" class="role-btn" id="login-role-driver">سائق</button>
             </div>
 
-            <div class="input-group">
-                <input type="text" id="login-email" placeholder="البريد الإلكتروني أو رقم الهاتف">
-            </div>
-            <div class="input-group">
-                <input type="password" id="login-password" class="password-field" placeholder="كلمة المرور">
-                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('login-password', this)"></i>
-            </div>
+            <div class="input-group"><input type="text" id="login-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
+            <div class="input-group"><input type="password" id="login-password" placeholder="كلمة المرور"></div>
             
             <button class="btn btn-primary" id="login-btn">تسجيل الدخول</button>
+            <p id="login-status" class="status-msg"></p>
+
             <div class="divider"><span id="login-or">أو</span></div>
             <button class="btn btn-pi" id="login-pi-btn">تسجيل الدخول عبر Pi</button>
             <div class="link-text"><a id="go-to-register">ليس لديك حساب؟ إنشاء حساب</a></div>
@@ -190,224 +166,177 @@
         <!-- ================= VUE 4 : INSCRIPTION ================= -->
         <div id="register-view" class="hidden">
             <h2 id="register-title">إنشاء حساب جديد</h2>
-            
-            <div class="role-toggle">
-                <button class="role-btn active" id="btn-register-client">دخول العميل</button>
-                <button class="role-btn" id="btn-register-driver">دخول السائق</button>
+
+            <div class="role-selector">
+                <button type="button" class="role-btn active" id="register-role-client">عميل</button>
+                <button type="button" class="role-btn" id="register-role-driver">سائق</button>
             </div>
 
-            <form id="register-form" onsubmit="return false;">
-                <div class="input-group">
-                    <input type="text" id="register-name" placeholder="الاسم الكامل" required>
-                </div>
-                <div class="input-group">
-                    <input type="email" id="register-email" placeholder="البريد الإلكتروني" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="register-password" class="password-field" placeholder="كلمة المرور" required>
-                    <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('register-password', this)"></i>
-                </div>
-                <button type="submit" class="btn btn-primary" id="register-btn">إنشاء حساب</button>
-            </form>
-            <p id="register-status-msg" class="status-msg"></p>
+            <div class="input-group"><input type="text" id="register-name" placeholder="الاسم الكامل"></div>
+            <div class="input-group"><input type="email" id="register-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
+            <div class="input-group"><input type="password" id="register-password" placeholder="كلمة المرور"></div>
+            
+            <button class="btn btn-primary" id="register-btn">إنشاء حساب</button>
+            <p id="register-status" class="status-msg"></p>
+
             <div class="link-text"><a id="go-to-login">لديك حساب بالفعل؟ تسجيل الدخول</a></div>
         </div>
 
     </main>
 
-    <!-- Script Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Script App -->
     <script>
         const translations = {
             'AR': {
                 topActionHome: 'تسجيل الدخول عبر Pi', topActionBack: '➔ رجوع', search: 'بحث عن سيارة أجرة...',
-                loginTitle: 'تسجيل دخول المستخدم', emailPlaceholder: 'البريد الإلكتروني أو رقم الهاتف',
-                passwordPlaceholder: 'كلمة المرور', loginBtn: 'تسجيل الدخول', orText: 'أو',
-                piBtn: 'تسجيل الدخول عبر Pi', goToRegister: 'ليس لديك حساب؟ إنشاء حساب',
-                registerTitle: 'إنشاء حساب جديد', namePlaceholder: 'الاسم الكامل',
-                registerBtn: 'إنشاء حساب', goToLogin: 'لديك حساب بالفعل؟ تسجيل الدخول',
-                mapTitle: 'أين أنت؟', locateBtn: 'تحديد موقعي', mapStatusLocating: 'جاري البحث عن موقعك...',
-                mapStatusFound: 'تم تحديد موقعك! سيارات الأجرة متاحة.',
-                clientAccess: 'دخول العميل', driverAccess: 'دخول السائق',
-                mailSending: 'جاري إرسال البريد الإلكتروني...',
-                mailSuccess: 'تم إنشاء الحساب وإرسال بريد التأكيد بنجاح!',
-                mailError: 'حدث خطأ أثناء إرسال البريد الإلكتروني.',
+                loginTitle: 'تسجيل دخول المستخدم', emailPlaceholder: 'البريد الإلكتروني أو رقم الهاتف', passwordPlaceholder: 'كلمة المرور', 
+                loginBtn: 'تسجيل الدخول', orText: 'أو', piBtn: 'تسجيل الدخول عبر Pi', goToRegister: 'ليس لديك حساب؟ إنشاء حساب',
+                registerTitle: 'إنشاء حساب جديد', namePlaceholder: 'الاسم الكامل', registerBtn: 'إنشاء حساب', goToLogin: 'لديك حساب بالفعل؟ تسجيل الدخول',
+                mapTitle: 'أين أنت؟', locateBtn: 'تحديد موقعي', mapStatusLocating: 'جاري البحث عن موقعك...', mapStatusFound: 'تم تحديد موقعك! سيارات الأجرة متاحة.',
+                errEmpty: 'يرجى ملء جميع الحقول.', statusSending: 'جاري إنشاء الحساب...', statusSuccess: 'تم إنشاء الحساب! تحقق من بريدك.', statusError: 'حدث خطأ. حاول مرة أخرى.',
+                roleClient: 'عميل', roleDriver: 'سائق', loginDevMsg: 'تسجيل الدخول غير متاح حاليا',
                 dir: 'rtl'
             },
             'FR': {
                 topActionHome: 'Connexion Pi', topActionBack: '➔ Retour', search: 'Chercher un taxi...',
-                loginTitle: 'Accès Utilisateur', emailPlaceholder: 'E-mail ou Numéro',
-                passwordPlaceholder: 'Mot de passe', loginBtn: 'Se connecter', orText: 'OU',
-                piBtn: 'Connexion Pi', goToRegister: 'Pas de compte ? Créer un compte',
-                registerTitle: 'Créer un compte', namePlaceholder: 'Nom complet',
-                registerBtn: 'S\'inscrire', goToLogin: 'Déjà un compte ? Se connecter',
-                mapTitle: 'Où êtes-vous ?', locateBtn: 'Détecter ma position', mapStatusLocating: 'Recherche de votre position...',
-                mapStatusFound: 'Position trouvée ! Taxis disponibles.',
-                clientAccess: 'Accès Client', driverAccess: 'Accès Conducteur',
-                mailSending: 'Envoi du mail de confirmation...',
-                mailSuccess: 'Compte créé ! E-mail de confirmation envoyé.',
-                mailError: 'Erreur lors de l\'envoi de l\'e-mail.',
+                loginTitle: 'Accès Utilisateur', emailPlaceholder: 'E-mail ou Numéro', passwordPlaceholder: 'Mot de passe', 
+                loginBtn: 'Se connecter', orText: 'OU', piBtn: 'Connexion Pi', goToRegister: 'Pas de compte ? Créer un compte',
+                registerTitle: 'Créer un compte', namePlaceholder: 'Nom complet', registerBtn: 'S\'inscrire', goToLogin: 'Déjà un compte ? Se connecter',
+                mapTitle: 'Où êtes-vous ?', locateBtn: 'Détecter ma position', mapStatusLocating: 'Recherche de votre position...', mapStatusFound: 'Position trouvée ! Taxis disponibles.',
+                errEmpty: 'Veuillez remplir tous les champs.', statusSending: 'Création en cours...', statusSuccess: 'Compte créé ! Vérifiez votre e-mail.', statusError: 'Une erreur est survenue.',
+                roleClient: 'Client', roleDriver: 'Conducteur', loginDevMsg: 'Connexion en cours de configuration',
                 dir: 'ltr'
             },
             'EN': {
                 topActionHome: 'Pi Sign-In', topActionBack: '➔ Back', search: 'Search for a taxi...',
-                loginTitle: 'User Access', emailPlaceholder: 'Email or Phone Number',
-                passwordPlaceholder: 'Password', loginBtn: 'Login', orText: 'OR',
-                piBtn: 'Pi Sign-In', goToRegister: 'Don\'t have an account? Sign up',
-                registerTitle: 'Create an Account', namePlaceholder: 'Full Name',
-                registerBtn: 'Sign Up', goToLogin: 'Already have an account? Login',
-                mapTitle: 'Where are you?', locateBtn: 'Detect my location', mapStatusLocating: 'Locating you...',
-                mapStatusFound: 'Location found! Cabs available.',
-                clientAccess: 'Client Access', driverAccess: 'Driver Access',
-                mailSending: 'Sending confirmation email...',
-                mailSuccess: 'Account created! Confirmation email sent.',
-                mailError: 'Failed to send confirmation email.',
+                loginTitle: 'User Access', emailPlaceholder: 'Email or Phone Number', passwordPlaceholder: 'Password', 
+                loginBtn: 'Login', orText: 'OR', piBtn: 'Pi Sign-In', goToRegister: 'Don\'t have an account? Sign up',
+                registerTitle: 'Create an Account', namePlaceholder: 'Full Name', registerBtn: 'Sign Up', goToLogin: 'Already have an account? Login',
+                mapTitle: 'Where are you?', locateBtn: 'Detect my location', mapStatusLocating: 'Locating you...', mapStatusFound: 'Location found! Cabs available.',
+                errEmpty: 'Please fill in all fields.', statusSending: 'Creating account...', statusSuccess: 'Account created! Check your email.', statusError: 'An error occurred.',
+                roleClient: 'Client', roleDriver: 'Driver', loginDevMsg: 'Login currently unavailable',
                 dir: 'ltr'
             }
         };
 
         let currentLang = 'AR';
         let currentView = 'home';
+        let currentRole = 'Client'; // Par défaut : Client
         let map = null;
-
-        let loginSelectedRole = 'client';
-        let registerSelectedRole = 'client';
 
         const htmlTag = document.documentElement;
         const langOptions = document.querySelectorAll('.lang-option');
-        const views = {
-            home: document.getElementById('home-view'),
-            login: document.getElementById('login-view'),
-            register: document.getElementById('register-view'),
-            map: document.getElementById('map-view')
-        };
+        const views = { home: document.getElementById('home-view'), login: document.getElementById('login-view'), register: document.getElementById('register-view'), map: document.getElementById('map-view') };
         const topActionBtn = document.getElementById('top-action-btn');
 
-        // --- Logique Rôles ---
-        function setupRoleToggle(clientBtnId, driverBtnId, isLogin) {
-            const clientBtn = document.getElementById(clientBtnId);
-            const driverBtn = document.getElementById(driverBtnId);
-            
-            clientBtn.addEventListener('click', () => {
-                clientBtn.classList.add('active');
-                driverBtn.classList.remove('active');
-                if(isLogin) loginSelectedRole = 'client';
-                else registerSelectedRole = 'client';
-            });
-            
-            driverBtn.addEventListener('click', () => {
-                driverBtn.classList.add('active');
-                clientBtn.classList.remove('active');
-                if(isLogin) loginSelectedRole = 'driver';
-                else registerSelectedRole = 'driver';
-            });
-        }
-
-        setupRoleToggle('btn-login-client', 'btn-login-driver', true);
-        setupRoleToggle('btn-register-client', 'btn-register-driver', false);
-
-        // --- Afficher / Masquer Mot de passe ---
-        function togglePassword(inputId, iconElement) {
-            const input = document.getElementById(inputId);
-            if (input.type === "password") {
-                input.type = "text";
-                iconElement.classList.remove('fa-eye');
-                iconElement.classList.add('fa-eye-slash');
-            } else {
-                input.type = "password";
-                iconElement.classList.remove('fa-eye-slash');
-                iconElement.classList.add('fa-eye');
-            }
-        }
-
-        // --- Envoi d'E-mail lors de l'inscription ---
-        document.getElementById('register-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const statusMsg = document.getElementById('register-status-msg');
-            const data = translations[currentLang];
-            
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-
-            statusMsg.style.color = '#f5b041';
-            statusMsg.innerText = data.mailSending;
-
-            const templateParams = {
-                to_name: name,
-                to_email: email,
-                user_role: registerSelectedRole === 'client' ? 'Client' : 'Conducteur / Driver'
-            };
-
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-                .then(function() {
-                    statusMsg.style.color = '#2ecc71';
-                    statusMsg.innerText = data.mailSuccess;
-                }, function(error) {
-                    console.log('EmailJS Error:', error);
-                    statusMsg.style.color = '#2ecc71';
-                    statusMsg.innerText = data.mailSuccess + " (Simulation)";
-                });
-        });
-
-        // --- Carte Leaflet ---
+        // --- GESTION DE LA CARTE ---
         function initMap() {
-            if (map !== null) return;
+            if (map !== null) return; 
             map = L.map('leaflet-map', { zoomControl: false }).setView([36.8065, 10.1815], 13);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap &copy; CARTO'
-            }).addTo(map);
-
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
             const taxiIcon = L.divIcon({ html: '<div class="taxi-marker">🚕</div>', className: '', iconSize: [24, 24], iconAnchor: [12, 12] });
-            L.marker([36.81, 10.18], {icon: taxiIcon}).addTo(map);
-            L.marker([36.80, 10.19], {icon: taxiIcon}).addTo(map);
-            L.marker([36.82, 10.17], {icon: taxiIcon}).addTo(map);
+            L.marker([36.81, 10.18], {icon: taxiIcon}).addTo(map); L.marker([36.80, 10.19], {icon: taxiIcon}).addTo(map); L.marker([36.82, 10.17], {icon: taxiIcon}).addTo(map);
         }
 
         document.getElementById('locate-btn').addEventListener('click', function() {
             const statusText = document.getElementById('map-status');
             statusText.innerText = translations[currentLang].mapStatusLocating;
-
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
+                    const lat = position.coords.latitude, lng = position.coords.longitude;
                     map.flyTo([lat, lng], 15);
-                    L.circleMarker([lat, lng], { color: '#f5b041', radius: 8, fillOpacity: 1 }).addTo(map)
-                     .bindPopup(translations[currentLang].mapTitle).openPopup();
-                    
+                    L.circleMarker([lat, lng], { color: '#a26b62', radius: 8, fillOpacity: 1 }).addTo(map).bindPopup(translations[currentLang].mapTitle).openPopup();
                     const taxiIcon = L.divIcon({ html: '<div class="taxi-marker">🚕</div>', className: '', iconSize: [24, 24] });
-                    L.marker([lat + 0.002, lng + 0.002], {icon: taxiIcon}).addTo(map);
-                    L.marker([lat - 0.003, lng + 0.001], {icon: taxiIcon}).addTo(map);
+                    L.marker([lat + 0.002, lng + 0.002], {icon: taxiIcon}).addTo(map); L.marker([lat - 0.003, lng + 0.001], {icon: taxiIcon}).addTo(map);
                     statusText.innerText = translations[currentLang].mapStatusFound;
-                }, function(error) {
-                    statusText.innerText = "Erreur de localisation. Veuillez activer le GPS.";
-                });
+                }, function(error) { statusText.innerText = "Erreur GPS."; });
             }
         });
 
-        // --- Navigation et Traduction ---
+        // --- BOUTONS DE RÔLES ---
+        function setupRoleToggle(clientBtnId, driverBtnId) {
+            const clientBtn = document.getElementById(clientBtnId);
+            const driverBtn = document.getElementById(driverBtnId);
+            clientBtn.addEventListener('click', (e) => {
+                e.preventDefault(); clientBtn.classList.add('active'); driverBtn.classList.remove('active'); currentRole = 'Client';
+            });
+            driverBtn.addEventListener('click', (e) => {
+                e.preventDefault(); driverBtn.classList.add('active'); clientBtn.classList.remove('active'); currentRole = 'Conducteur';
+            });
+        }
+        setupRoleToggle('login-role-client', 'login-role-driver');
+        setupRoleToggle('register-role-client', 'register-role-driver');
+
+        // --- BOUTON DE CONNEXION ---
+        document.getElementById('login-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            const statusMsg = document.getElementById('login-status');
+            
+            if(!email || !pass) {
+                statusMsg.innerText = translations[currentLang].errEmpty;
+                statusMsg.style.color = "#ff4d4d";
+            } else {
+                statusMsg.innerText = translations[currentLang].loginDevMsg;
+                statusMsg.style.color = "#a26b62";
+            }
+        });
+
+        // --- INSCRIPTION EMAILJS ---
+        document.getElementById('register-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const statusMsg = document.getElementById('register-status');
+            const data = translations[currentLang];
+
+            if(!name || !email || !password) {
+                statusMsg.innerText = data.errEmpty;
+                statusMsg.style.color = "#ff4d4d"; return;
+            }
+
+            // 🔴 Sécurité : Avertissement si vous avez oublié de mettre vos clés
+            if ("VOTRE_SERVICE_ID_ICI" === "VOTRE_SERVICE_ID_ICI" || "VOTRE_CLE_PUBLIQUE_ICI" === "VOTRE_CLE_PUBLIQUE_ICI") {
+                statusMsg.innerText = "⚠️ Attention : Veuillez remplacer vos clés EmailJS dans le code.";
+                statusMsg.style.color = "#ffaa00"; return;
+            }
+
+            statusMsg.innerText = data.statusSending; statusMsg.style.color = "#a26b62";
+
+            const templateParams = {
+                user_name: name,
+                user_email: email,
+                user_password: password,
+                user_role: currentRole 
+            };
+
+            // 🔴 2. REMPLACEZ "VOTRE_SERVICE_ID_ICI" PAR VOTRE VRAI SERVICE ID (Votre Template ID vt97o33 est déjà là)
+            emailjs.send('VOTRE_SERVICE_ID_ICI', 'vt97o33', templateParams)
+                .then(function(response) {
+                    statusMsg.innerText = data.statusSuccess; statusMsg.style.color = "#4CAF50";
+                    document.getElementById('register-name').value = ''; document.getElementById('register-email').value = ''; document.getElementById('register-password').value = '';
+                }, function(error) {
+                    statusMsg.innerText = data.statusError; statusMsg.style.color = "#ff4d4d"; console.error("EmailJS Error:", error);
+                });
+        });
+
+        // --- NAVIGATION ET TRADUCTION ---
         function switchView(viewName) {
             currentView = viewName;
-            Object.values(views).forEach(v => v.classList.add('hidden'));
-            views[viewName].classList.remove('hidden');
-            
-            if (viewName === 'map') {
-                initMap();
-                setTimeout(() => { map.invalidateSize(); }, 100);
-            }
+            Object.values(views).forEach(v => v.classList.add('hidden')); views[viewName].classList.remove('hidden');
+            if (viewName === 'map') { initMap(); setTimeout(() => { map.invalidateSize(); }, 100); }
+            document.querySelectorAll('.status-msg').forEach(el => el.innerText = ""); // Nettoie les messages
             updateText();
         }
 
         function updateText() {
             const data = translations[currentLang];
-            htmlTag.setAttribute('dir', data.dir);
-            htmlTag.setAttribute('lang', currentLang.toLowerCase());
-
+            htmlTag.setAttribute('dir', data.dir); htmlTag.setAttribute('lang', currentLang.toLowerCase());
             topActionBtn.innerText = currentView === 'home' ? data.topActionHome : data.topActionBack;
             document.getElementById('search-text-ui').innerText = data.search;
-            
             document.getElementById('login-title').innerText = data.loginTitle;
             document.getElementById('login-email').placeholder = data.emailPlaceholder;
             document.getElementById('login-password').placeholder = data.passwordPlaceholder;
@@ -415,41 +344,31 @@
             document.getElementById('login-or').innerText = data.orText;
             document.getElementById('login-pi-btn').innerText = data.piBtn;
             document.getElementById('go-to-register').innerText = data.goToRegister;
-            document.getElementById('btn-login-client').innerText = data.clientAccess;
-            document.getElementById('btn-login-driver').innerText = data.driverAccess;
-
+            document.getElementById('login-role-client').innerText = data.roleClient;
+            document.getElementById('login-role-driver').innerText = data.roleDriver;
             document.getElementById('register-title').innerText = data.registerTitle;
             document.getElementById('register-name').placeholder = data.namePlaceholder;
             document.getElementById('register-email').placeholder = data.emailPlaceholder;
             document.getElementById('register-password').placeholder = data.passwordPlaceholder;
             document.getElementById('register-btn').innerText = data.registerBtn;
             document.getElementById('go-to-login').innerText = data.goToLogin;
-            document.getElementById('btn-register-client').innerText = data.clientAccess;
-            document.getElementById('btn-register-driver').innerText = data.driverAccess;
-
+            document.getElementById('register-role-client').innerText = data.roleClient;
+            document.getElementById('register-role-driver').innerText = data.roleDriver;
             document.getElementById('map-title').innerText = data.mapTitle;
             document.getElementById('locate-text').innerText = data.locateBtn;
-            document.getElementById('map-status').innerText = ""; 
         }
 
         langOptions.forEach(option => {
             option.addEventListener('click', function() {
-                langOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-                currentLang = this.querySelector('span').innerText;
-                updateText();
+                langOptions.forEach(opt => opt.classList.remove('active')); this.classList.add('active');
+                currentLang = this.querySelector('span').innerText; updateText();
             });
         });
 
-        topActionBtn.addEventListener('click', function() {
-            if (currentView === 'home') switchView('login');
-            else switchView('home');
-        });
-
+        topActionBtn.addEventListener('click', function() { if (currentView === 'home') switchView('login'); else switchView('home'); });
         document.getElementById('open-map-btn').addEventListener('click', () => switchView('map'));
         document.getElementById('go-to-register').addEventListener('click', () => switchView('register'));
         document.getElementById('go-to-login').addEventListener('click', () => switchView('login'));
-
     </script>
 </body>
 </html>
