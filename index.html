@@ -64,7 +64,7 @@
         .btn-primary:hover { background: #eb984e; }
         .btn-pi { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* Toggle Switch Client / Conducteur (Jaune Taxi) */
+        /* Toggle Switch Client / Conducteur */
         .role-toggle {
             display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px; margin-bottom: 20px; padding: 5px; gap: 5px;
@@ -86,9 +86,26 @@
 
         /* Form Views */
         h2 { text-align: center; margin-bottom: 25px; font-size: 1.4rem; font-weight: 700; }
-        .input-group { margin-bottom: 15px; }
-        .input-group input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+        
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group input { 
+            width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 12px; padding: 14px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; 
+        }
         .input-group input:focus { border-color: #f5b041; }
+        
+        /* Icône mot de passe dynamique (RTL/LTR) */
+        .password-toggle {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5); cursor: pointer; transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        .password-toggle:hover { color: #f5b041; }
+        
+        html[dir="rtl"] .password-toggle { left: 15px; }
+        html[dir="ltr"] .password-toggle { right: 15px; }
+        html[dir="rtl"] .input-group input.password-field { padding-left: 45px; }
+        html[dir="ltr"] .input-group input.password-field { padding-right: 45px; }
         
         .divider { text-align: center; margin: 10px 0 20px; position: relative; }
         .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 35%; height: 1px; background: rgba(255, 255, 255, 0.1); }
@@ -156,8 +173,14 @@
                 <button class="role-btn" id="btn-login-driver">دخول السائق</button>
             </div>
 
-            <div class="input-group"><input type="text" id="login-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
-            <div class="input-group"><input type="password" id="login-password" placeholder="كلمة المرور"></div>
+            <div class="input-group">
+                <input type="text" id="login-email" placeholder="البريد الإلكتروني أو رقم الهاتف">
+            </div>
+            <div class="input-group">
+                <input type="password" id="login-password" class="password-field" placeholder="كلمة المرور">
+                <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('login-password', this)"></i>
+            </div>
+            
             <button class="btn btn-primary" id="login-btn">تسجيل الدخول</button>
             <div class="divider"><span id="login-or">أو</span></div>
             <button class="btn btn-pi" id="login-pi-btn">تسجيل الدخول عبر Pi</button>
@@ -174,9 +197,16 @@
             </div>
 
             <form id="register-form" onsubmit="return false;">
-                <div class="input-group"><input type="text" id="register-name" placeholder="الاسم الكامل" required></div>
-                <div class="input-group"><input type="email" id="register-email" placeholder="البريد الإلكتروني" required></div>
-                <div class="input-group"><input type="password" id="register-password" placeholder="كلمة المرور" required></div>
+                <div class="input-group">
+                    <input type="text" id="register-name" placeholder="الاسم الكامل" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="register-email" placeholder="البريد الإلكتروني" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="register-password" class="password-field" placeholder="كلمة المرور" required>
+                    <i class="fa-solid fa-eye password-toggle" onclick="togglePassword('register-password', this)"></i>
+                </div>
                 <button type="submit" class="btn btn-primary" id="register-btn">إنشاء حساب</button>
             </form>
             <p id="register-status-msg" class="status-msg"></p>
@@ -278,6 +308,20 @@
         setupRoleToggle('btn-login-client', 'btn-login-driver', true);
         setupRoleToggle('btn-register-client', 'btn-register-driver', false);
 
+        // --- Afficher / Masquer Mot de passe ---
+        function togglePassword(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                iconElement.classList.remove('fa-eye');
+                iconElement.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                iconElement.classList.remove('fa-eye-slash');
+                iconElement.classList.add('fa-eye');
+            }
+        }
+
         // --- Envoi d'E-mail lors de l'inscription ---
         document.getElementById('register-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -290,20 +334,17 @@
             statusMsg.style.color = '#f5b041';
             statusMsg.innerText = data.mailSending;
 
-            // Paramètres envoyés au modèle EmailJS
             const templateParams = {
                 to_name: name,
                 to_email: email,
                 user_role: registerSelectedRole === 'client' ? 'Client' : 'Conducteur / Driver'
             };
 
-            // Envoi via EmailJS (Remplacez 'YOUR_SERVICE_ID' et 'YOUR_TEMPLATE_ID')
             emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
                 .then(function() {
                     statusMsg.style.color = '#2ecc71';
                     statusMsg.innerText = data.mailSuccess;
                 }, function(error) {
-                    // Fallback de démonstration si les clés EmailJS ne sont pas encore configurées
                     console.log('EmailJS Error:', error);
                     statusMsg.style.color = '#2ecc71';
                     statusMsg.innerText = data.mailSuccess + " (Simulation)";
