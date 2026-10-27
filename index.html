@@ -16,6 +16,15 @@
     <!-- Leaflet CSS (Pour la carte interactive) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+    <!-- IMPORTATION DE EMAILJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // REMPLACEZ PAR VOTRE CLÉ PUBLIQUE EMAILJS
+          emailjs.init("VOTRE_CLE_PUBLIQUE"); 
+       })();
+    </script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Inter', sans-serif; }
 
@@ -55,6 +64,17 @@
         .btn-primary:hover { background: #8a574f; }
         .btn-pi { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
+        /* Role Selector (Client / Conducteur) */
+        .role-selector {
+            display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; margin-bottom: 20px; overflow: hidden;
+        }
+        .role-btn {
+            flex: 1; padding: 12px; background: transparent; border: none; color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.3s ease;
+        }
+        .role-btn.active { background: rgba(255, 255, 255, 0.1); color: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+
         /* Home View */
         .logo-area { text-align: center; margin: 10px 0 40px 0; }
         .logo-img { max-width: 250px; width: 100%; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4)); }
@@ -64,7 +84,7 @@
         .search-bar span { color: rgba(255, 255, 255, 0.4); font-weight: 500; }
 
         /* Form Views (Login & Register) */
-        h2 { text-align: center; margin-bottom: 25px; font-size: 1.4rem; font-weight: 700; }
+        h2 { text-align: center; margin-bottom: 20px; font-size: 1.4rem; font-weight: 700; }
         .input-group { margin-bottom: 15px; }
         .input-group input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; }
         .input-group input:focus { border-color: #a26b62; }
@@ -85,6 +105,7 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
         .hidden { display: none !important; }
+        #register-status { text-align: center; font-size: 0.9rem; font-weight: 600; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -109,7 +130,6 @@
             <div class="logo-area">
                 <img src="logo-taxi.png" alt="Taxipic Logo" class="logo-img">
             </div>
-            <!-- Clic sur la recherche ouvre la CARTE -->
             <div class="search-bar" id="open-map-btn">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <span id="search-text-ui">بحث عن سيارة أجرة...</span>
@@ -119,21 +139,23 @@
         <!-- ================= VUE 2 : CARTE & LOCALISATION ================= -->
         <div id="map-view" class="hidden">
             <h2 id="map-title">أين أنت؟</h2>
-            
             <button class="btn btn-primary" id="locate-btn" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
                 <i class="fa-solid fa-location-crosshairs"></i> <span id="locate-text">تحديد موقعي</span>
             </button>
-            
-            <div class="map-wrapper">
-                <div id="leaflet-map"></div>
-            </div>
-
+            <div class="map-wrapper"><div id="leaflet-map"></div></div>
             <p id="map-status" style="text-align: center; color: #a26b62; font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;"></p>
         </div>
 
         <!-- ================= VUE 3 : CONNEXION ================= -->
         <div id="login-view" class="hidden">
             <h2 id="login-title">تسجيل دخول المستخدم</h2>
+            
+            <!-- Sélecteur Client / Conducteur -->
+            <div class="role-selector">
+                <button type="button" class="role-btn active" id="login-role-client">عميل</button>
+                <button type="button" class="role-btn" id="login-role-driver">سائق</button>
+            </div>
+
             <div class="input-group"><input type="text" id="login-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
             <div class="input-group"><input type="password" id="login-password" placeholder="كلمة المرور"></div>
             <button class="btn btn-primary" id="login-btn">تسجيل الدخول</button>
@@ -145,10 +167,20 @@
         <!-- ================= VUE 4 : INSCRIPTION ================= -->
         <div id="register-view" class="hidden">
             <h2 id="register-title">إنشاء حساب جديد</h2>
+
+            <!-- Sélecteur Client / Conducteur -->
+            <div class="role-selector">
+                <button type="button" class="role-btn active" id="register-role-client">عميل</button>
+                <button type="button" class="role-btn" id="register-role-driver">سائق</button>
+            </div>
+
             <div class="input-group"><input type="text" id="register-name" placeholder="الاسم الكامل"></div>
-            <div class="input-group"><input type="text" id="register-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
+            <div class="input-group"><input type="email" id="register-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
             <div class="input-group"><input type="password" id="register-password" placeholder="كلمة المرور"></div>
+            
             <button class="btn btn-primary" id="register-btn">إنشاء حساب</button>
+            <p id="register-status"></p>
+
             <div class="link-text"><a id="go-to-login">لديك حساب بالفعل؟ تسجيل الدخول</a></div>
         </div>
 
@@ -169,6 +201,8 @@
                 registerBtn: 'إنشاء حساب', goToLogin: 'لديك حساب بالفعل؟ تسجيل الدخول',
                 mapTitle: 'أين أنت؟', locateBtn: 'تحديد موقعي', mapStatusLocating: 'جاري البحث عن موقعك...',
                 mapStatusFound: 'تم تحديد موقعك! سيارات الأجرة متاحة.',
+                errEmpty: 'يرجى ملء جميع الحقول.', statusSending: 'جاري إنشاء الحساب...', statusSuccess: 'تم إنشاء الحساب! تحقق من بريدك.', statusError: 'حدث خطأ. حاول مرة أخرى.',
+                roleClient: 'عميل', roleDriver: 'سائق',
                 dir: 'rtl'
             },
             'FR': {
@@ -180,6 +214,8 @@
                 registerBtn: 'S\'inscrire', goToLogin: 'Déjà un compte ? Se connecter',
                 mapTitle: 'Où êtes-vous ?', locateBtn: 'Détecter ma position', mapStatusLocating: 'Recherche de votre position...',
                 mapStatusFound: 'Position trouvée ! Taxis disponibles.',
+                errEmpty: 'Veuillez remplir tous les champs.', statusSending: 'Création en cours...', statusSuccess: 'Compte créé ! Vérifiez votre e-mail.', statusError: 'Une erreur est survenue.',
+                roleClient: 'Client', roleDriver: 'Conducteur',
                 dir: 'ltr'
             },
             'EN': {
@@ -191,6 +227,8 @@
                 registerBtn: 'Sign Up', goToLogin: 'Already have an account? Login',
                 mapTitle: 'Where are you?', locateBtn: 'Detect my location', mapStatusLocating: 'Locating you...',
                 mapStatusFound: 'Location found! Cabs available.',
+                errEmpty: 'Please fill in all fields.', statusSending: 'Creating account...', statusSuccess: 'Account created! Check your email.', statusError: 'An error occurred.',
+                roleClient: 'Client', roleDriver: 'Driver',
                 dir: 'ltr'
             }
         };
@@ -211,112 +249,23 @@
 
         // --- GESTION DE LA CARTE LEAFLET ---
         function initMap() {
-            if (map !== null) return; // Évite de créer 2 cartes
+            if (map !== null) return; 
             
-            // Initialisation centrée sur la Tunisie par défaut
             map = L.map('leaflet-map', { zoomControl: false }).setView([36.8065, 10.1815], 13);
             
-            // Fond de carte sombre et chic (CartoDB Dark Matter)
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; OpenStreetMap &copy; CARTO'
             }).addTo(map);
 
-            // Simulation de taxis autour de Tunis
             const taxiIcon = L.divIcon({ html: '<div class="taxi-marker">🚕</div>', className: '', iconSize: [24, 24], iconAnchor: [12, 12] });
             L.marker([36.81, 10.18], {icon: taxiIcon}).addTo(map);
             L.marker([36.80, 10.19], {icon: taxiIcon}).addTo(map);
             L.marker([36.82, 10.17], {icon: taxiIcon}).addTo(map);
         }
 
-        // Géolocalisation
         document.getElementById('locate-btn').addEventListener('click', function() {
             const statusText = document.getElementById('map-status');
             statusText.innerText = translations[currentLang].mapStatusLocating;
 
             if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    
-                    // Centrer la carte sur l'utilisateur
-                    map.flyTo([lat, lng], 15);
-                    
-                    // Ajouter un marqueur pour l'utilisateur
-                    L.circleMarker([lat, lng], { color: '#a26b62', radius: 8, fillOpacity: 1 }).addTo(map)
-                     .bindPopup(translations[currentLang].mapTitle).openPopup();
-                    
-                    // Ajouter quelques faux taxis autour de la nouvelle position
-                    const taxiIcon = L.divIcon({ html: '<div class="taxi-marker">🚕</div>', className: '', iconSize: [24, 24] });
-                    L.marker([lat + 0.002, lng + 0.002], {icon: taxiIcon}).addTo(map);
-                    L.marker([lat - 0.003, lng + 0.001], {icon: taxiIcon}).addTo(map);
-
-                    statusText.innerText = translations[currentLang].mapStatusFound;
-                }, function(error) {
-                    statusText.innerText = "Erreur de localisation. Veuillez activer le GPS.";
-                });
-            }
-        });
-
-        // --- NAVIGATION ET TRADUCTION ---
-        function switchView(viewName) {
-            currentView = viewName;
-            Object.values(views).forEach(v => v.classList.add('hidden'));
-            views[viewName].classList.remove('hidden');
-            
-            // Si on ouvre la carte, on doit l'initialiser et redimensionner (bug connu de Leaflet quand caché)
-            if (viewName === 'map') {
-                initMap();
-                setTimeout(() => { map.invalidateSize(); }, 100);
-            }
-            updateText();
-        }
-
-        function updateText() {
-            const data = translations[currentLang];
-            htmlTag.setAttribute('dir', data.dir);
-            htmlTag.setAttribute('lang', currentLang.toLowerCase());
-
-            topActionBtn.innerText = currentView === 'home' ? data.topActionHome : data.topActionBack;
-
-            document.getElementById('search-text-ui').innerText = data.search;
-            document.getElementById('login-title').innerText = data.loginTitle;
-            document.getElementById('login-email').placeholder = data.emailPlaceholder;
-            document.getElementById('login-password').placeholder = data.passwordPlaceholder;
-            document.getElementById('login-btn').innerText = data.loginBtn;
-            document.getElementById('login-or').innerText = data.orText;
-            document.getElementById('login-pi-btn').innerText = data.piBtn;
-            document.getElementById('go-to-register').innerText = data.goToRegister;
-
-            document.getElementById('register-title').innerText = data.registerTitle;
-            document.getElementById('register-name').placeholder = data.namePlaceholder;
-            document.getElementById('register-email').placeholder = data.emailPlaceholder;
-            document.getElementById('register-password').placeholder = data.passwordPlaceholder;
-            document.getElementById('register-btn').innerText = data.registerBtn;
-            document.getElementById('go-to-login').innerText = data.goToLogin;
-
-            document.getElementById('map-title').innerText = data.mapTitle;
-            document.getElementById('locate-text').innerText = data.locateBtn;
-            document.getElementById('map-status').innerText = ""; // On vide le statut au changement de langue
-        }
-
-        langOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                langOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-                currentLang = this.querySelector('span').innerText;
-                updateText();
-            });
-        });
-
-        topActionBtn.addEventListener('click', function() {
-            if (currentView === 'home') switchView('login');
-            else switchView('home');
-        });
-
-        document.getElementById('open-map-btn').addEventListener('click', () => switchView('map'));
-        document.getElementById('go-to-register').addEventListener('click', () => switchView('register'));
-        document.getElementById('go-to-login').addEventListener('click', () => switchView('login'));
-
-    </script>
-</body>
-</html>
+                navigator.geolocation.
