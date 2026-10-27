@@ -20,8 +20,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          // 🔴 1. REMPLACEZ "VOTRE_CLE_PUBLIQUE_ICI" PAR VOTRE VRAIE CLÉ PUBLIQUE EMAILJS
-          emailjs.init("VOTRE_CLE_PUBLIQUE_ICI"); 
+          // VOTRE CLÉ PUBLIQUE EMAILJS
+          emailjs.init("qpFqoExr3hVCfHkIs"); 
        })();
     </script>
 
@@ -298,23 +298,17 @@
                 statusMsg.style.color = "#ff4d4d"; return;
             }
 
-            // 🔴 Sécurité : Avertissement si vous avez oublié de mettre vos clés
-            if ("VOTRE_SERVICE_ID_ICI" === "VOTRE_SERVICE_ID_ICI" || "VOTRE_CLE_PUBLIQUE_ICI" === "VOTRE_CLE_PUBLIQUE_ICI") {
-                statusMsg.innerText = "⚠️ Attention : Veuillez remplacer vos clés EmailJS dans le code.";
-                statusMsg.style.color = "#ffaa00"; return;
-            }
-
             statusMsg.innerText = data.statusSending; statusMsg.style.color = "#a26b62";
 
             const templateParams = {
                 user_name: name,
                 user_email: email,
                 user_password: password,
-                user_role: currentRole 
+                user_role: currentRole
             };
 
-            // 🔴 2. REMPLACEZ "VOTRE_SERVICE_ID_ICI" PAR VOTRE VRAI SERVICE ID (Votre Template ID vt97o33 est déjà là)
-            emailjs.send('VOTRE_SERVICE_ID_ICI', 'vt97o33', templateParams)
+            // VOS CLÉS EMAILJS SONT INTÉGRÉES ICI (Service ID et Template ID)
+            emailjs.send('service_ebeqht9', 'vt97o33', templateParams)
                 .then(function(response) {
                     statusMsg.innerText = data.statusSuccess; statusMsg.style.color = "#4CAF50";
                     document.getElementById('register-name').value = ''; document.getElementById('register-email').value = ''; document.getElementById('register-password').value = '';
@@ -328,7 +322,7 @@
             currentView = viewName;
             Object.values(views).forEach(v => v.classList.add('hidden')); views[viewName].classList.remove('hidden');
             if (viewName === 'map') { initMap(); setTimeout(() => { map.invalidateSize(); }, 100); }
-            document.querySelectorAll('.status-msg').forEach(el => el.innerText = ""); // Nettoie les messages
+            document.querySelectorAll('.status-msg').forEach(el => el.innerText = ""); 
             updateText();
         }
 
