@@ -20,7 +20,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
-          // REMPLACEZ PAR VOTRE CLÉ PUBLIQUE EMAILJS
+          // REMPLACEZ ICI PAR VOTRE CLÉ PUBLIQUE EMAILJS (Account > Public Key)
           emailjs.init("VOTRE_CLE_PUBLIQUE"); 
        })();
     </script>
@@ -64,7 +64,7 @@
         .btn-primary:hover { background: #8a574f; }
         .btn-pi { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* Role Selector (Client / Conducteur) */
+        /* Role Selector */
         .role-selector {
             display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px; margin-bottom: 20px; overflow: hidden;
@@ -83,7 +83,7 @@
         .search-bar i { color: #a26b62; font-size: 1.2rem; }
         .search-bar span { color: rgba(255, 255, 255, 0.4); font-weight: 500; }
 
-        /* Form Views (Login & Register) */
+        /* Forms */
         h2 { text-align: center; margin-bottom: 20px; font-size: 1.4rem; font-weight: 700; }
         .input-group { margin-bottom: 15px; }
         .input-group input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; }
@@ -96,16 +96,14 @@
         .link-text { text-align: center; margin-top: 10px; font-size: 0.9rem; }
         .link-text a { color: #a26b62; text-decoration: none; font-weight: 600; cursor: pointer; }
 
-        /* Map View Specifics */
+        /* Map */
         .map-wrapper { width: 100%; height: 280px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 15px; position: relative; }
         #leaflet-map { width: 100%; height: 100%; background: #000; }
-        
-        /* Custom Taxi Icon */
         .taxi-marker { font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); animation: bounce 2s infinite ease-in-out; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
         .hidden { display: none !important; }
-        #register-status { text-align: center; font-size: 0.9rem; font-weight: 600; margin-top: 10px; }
+        .status-msg { text-align: center; font-size: 0.9rem; font-weight: 600; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -117,7 +115,6 @@
         <!-- HEADER PARTAGÉ -->
         <div class="header-row">
             <button class="btn-small" id="top-action-btn">تسجيل الدخول عبر Pi</button>
-            
             <div class="language-menu">
                 <div class="lang-option active"><img src="https://flagcdn.com/sa.svg" alt="AR"><span>AR</span></div>
                 <div class="lang-option"><img src="https://flagcdn.com/fr.svg" alt="FR"><span>FR</span></div>
@@ -136,21 +133,20 @@
             </div>
         </div>
 
-        <!-- ================= VUE 2 : CARTE & LOCALISATION ================= -->
+        <!-- ================= VUE 2 : CARTE ================= -->
         <div id="map-view" class="hidden">
             <h2 id="map-title">أين أنت؟</h2>
             <button class="btn btn-primary" id="locate-btn" style="display: flex; justify-content: center; gap: 10px; align-items: center;">
                 <i class="fa-solid fa-location-crosshairs"></i> <span id="locate-text">تحديد موقعي</span>
             </button>
             <div class="map-wrapper"><div id="leaflet-map"></div></div>
-            <p id="map-status" style="text-align: center; color: #a26b62; font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;"></p>
+            <p id="map-status" class="status-msg"></p>
         </div>
 
         <!-- ================= VUE 3 : CONNEXION ================= -->
         <div id="login-view" class="hidden">
             <h2 id="login-title">تسجيل دخول المستخدم</h2>
             
-            <!-- Sélecteur Client / Conducteur -->
             <div class="role-selector">
                 <button type="button" class="role-btn active" id="login-role-client">عميل</button>
                 <button type="button" class="role-btn" id="login-role-driver">سائق</button>
@@ -158,7 +154,10 @@
 
             <div class="input-group"><input type="text" id="login-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
             <div class="input-group"><input type="password" id="login-password" placeholder="كلمة المرور"></div>
+            
             <button class="btn btn-primary" id="login-btn">تسجيل الدخول</button>
+            <p id="login-status" class="status-msg"></p>
+
             <div class="divider"><span id="login-or">أو</span></div>
             <button class="btn btn-pi" id="login-pi-btn">تسجيل الدخول عبر Pi</button>
             <div class="link-text"><a id="go-to-register">ليس لديك حساب؟ إنشاء حساب</a></div>
@@ -168,7 +167,6 @@
         <div id="register-view" class="hidden">
             <h2 id="register-title">إنشاء حساب جديد</h2>
 
-            <!-- Sélecteur Client / Conducteur -->
             <div class="role-selector">
                 <button type="button" class="role-btn active" id="register-role-client">عميل</button>
                 <button type="button" class="role-btn" id="register-role-driver">سائق</button>
@@ -179,93 +177,172 @@
             <div class="input-group"><input type="password" id="register-password" placeholder="كلمة المرور"></div>
             
             <button class="btn btn-primary" id="register-btn">إنشاء حساب</button>
-            <p id="register-status"></p>
+            <p id="register-status" class="status-msg"></p>
 
             <div class="link-text"><a id="go-to-login">لديك حساب بالفعل؟ تسجيل الدخول</a></div>
         </div>
 
     </main>
 
-    <!-- Script Leaflet (Carte) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Script de l'application -->
     <script>
         const translations = {
             'AR': {
                 topActionHome: 'تسجيل الدخول عبر Pi', topActionBack: '➔ رجوع', search: 'بحث عن سيارة أجرة...',
-                loginTitle: 'تسجيل دخول المستخدم', emailPlaceholder: 'البريد الإلكتروني أو رقم الهاتف',
-                passwordPlaceholder: 'كلمة المرور', loginBtn: 'تسجيل الدخول', orText: 'أو',
-                piBtn: 'تسجيل الدخول عبر Pi', goToRegister: 'ليس لديك حساب؟ إنشاء حساب',
-                registerTitle: 'إنشاء حساب جديد', namePlaceholder: 'الاسم الكامل',
-                registerBtn: 'إنشاء حساب', goToLogin: 'لديك حساب بالفعل؟ تسجيل الدخول',
-                mapTitle: 'أين أنت؟', locateBtn: 'تحديد موقعي', mapStatusLocating: 'جاري البحث عن موقعك...',
-                mapStatusFound: 'تم تحديد موقعك! سيارات الأجرة متاحة.',
+                loginTitle: 'تسجيل دخول المستخدم', emailPlaceholder: 'البريد الإلكتروني أو رقم الهاتف', passwordPlaceholder: 'كلمة المرور', 
+                loginBtn: 'تسجيل الدخول', orText: 'أو', piBtn: 'تسجيل الدخول عبر Pi', goToRegister: 'ليس لديك حساب؟ إنشاء حساب',
+                registerTitle: 'إنشاء حساب جديد', namePlaceholder: 'الاسم الكامل', registerBtn: 'إنشاء حساب', goToLogin: 'لديك حساب بالفعل؟ تسجيل الدخول',
+                mapTitle: 'أين أنت؟', locateBtn: 'تحديد موقعي', mapStatusLocating: 'جاري البحث عن موقعك...', mapStatusFound: 'تم تحديد موقعك! سيارات الأجرة متاحة.',
                 errEmpty: 'يرجى ملء جميع الحقول.', statusSending: 'جاري إنشاء الحساب...', statusSuccess: 'تم إنشاء الحساب! تحقق من بريدك.', statusError: 'حدث خطأ. حاول مرة أخرى.',
-                roleClient: 'عميل', roleDriver: 'سائق',
+                roleClient: 'عميل', roleDriver: 'سائق', loginDevMsg: 'تسجيل الدخول غير متاح حاليا',
                 dir: 'rtl'
             },
             'FR': {
                 topActionHome: 'Connexion Pi', topActionBack: '➔ Retour', search: 'Chercher un taxi...',
-                loginTitle: 'Accès Utilisateur', emailPlaceholder: 'E-mail ou Numéro',
-                passwordPlaceholder: 'Mot de passe', loginBtn: 'Se connecter', orText: 'OU',
-                piBtn: 'Connexion Pi', goToRegister: 'Pas de compte ? Créer un compte',
-                registerTitle: 'Créer un compte', namePlaceholder: 'Nom complet',
-                registerBtn: 'S\'inscrire', goToLogin: 'Déjà un compte ? Se connecter',
-                mapTitle: 'Où êtes-vous ?', locateBtn: 'Détecter ma position', mapStatusLocating: 'Recherche de votre position...',
-                mapStatusFound: 'Position trouvée ! Taxis disponibles.',
+                loginTitle: 'Accès Utilisateur', emailPlaceholder: 'E-mail ou Numéro', passwordPlaceholder: 'Mot de passe', 
+                loginBtn: 'Se connecter', orText: 'OU', piBtn: 'Connexion Pi', goToRegister: 'Pas de compte ? Créer un compte',
+                registerTitle: 'Créer un compte', namePlaceholder: 'Nom complet', registerBtn: 'S\'inscrire', goToLogin: 'Déjà un compte ? Se connecter',
+                mapTitle: 'Où êtes-vous ?', locateBtn: 'Détecter ma position', mapStatusLocating: 'Recherche de votre position...', mapStatusFound: 'Position trouvée ! Taxis disponibles.',
                 errEmpty: 'Veuillez remplir tous les champs.', statusSending: 'Création en cours...', statusSuccess: 'Compte créé ! Vérifiez votre e-mail.', statusError: 'Une erreur est survenue.',
-                roleClient: 'Client', roleDriver: 'Conducteur',
+                roleClient: 'Client', roleDriver: 'Conducteur', loginDevMsg: 'Connexion en cours de configuration',
                 dir: 'ltr'
             },
             'EN': {
                 topActionHome: 'Pi Sign-In', topActionBack: '➔ Back', search: 'Search for a taxi...',
-                loginTitle: 'User Access', emailPlaceholder: 'Email or Phone Number',
-                passwordPlaceholder: 'Password', loginBtn: 'Login', orText: 'OR',
-                piBtn: 'Pi Sign-In', goToRegister: 'Don\'t have an account? Sign up',
-                registerTitle: 'Create an Account', namePlaceholder: 'Full Name',
-                registerBtn: 'Sign Up', goToLogin: 'Already have an account? Login',
-                mapTitle: 'Where are you?', locateBtn: 'Detect my location', mapStatusLocating: 'Locating you...',
-                mapStatusFound: 'Location found! Cabs available.',
+                loginTitle: 'User Access', emailPlaceholder: 'Email or Phone Number', passwordPlaceholder: 'Password', 
+                loginBtn: 'Login', orText: 'OR', piBtn: 'Pi Sign-In', goToRegister: 'Don\'t have an account? Sign up',
+                registerTitle: 'Create an Account', namePlaceholder: 'Full Name', registerBtn: 'Sign Up', goToLogin: 'Already have an account? Login',
+                mapTitle: 'Where are you?', locateBtn: 'Detect my location', mapStatusLocating: 'Locating you...', mapStatusFound: 'Location found! Cabs available.',
                 errEmpty: 'Please fill in all fields.', statusSending: 'Creating account...', statusSuccess: 'Account created! Check your email.', statusError: 'An error occurred.',
-                roleClient: 'Client', roleDriver: 'Driver',
+                roleClient: 'Client', roleDriver: 'Driver', loginDevMsg: 'Login currently unavailable',
                 dir: 'ltr'
             }
         };
 
         let currentLang = 'AR';
         let currentView = 'home';
+        let currentRole = 'Client'; // On mémorise le rôle sélectionné
         let map = null;
 
         const htmlTag = document.documentElement;
         const langOptions = document.querySelectorAll('.lang-option');
-        const views = {
-            home: document.getElementById('home-view'),
-            login: document.getElementById('login-view'),
-            register: document.getElementById('register-view'),
-            map: document.getElementById('map-view')
-        };
+        const views = { home: document.getElementById('home-view'), login: document.getElementById('login-view'), register: document.getElementById('register-view'), map: document.getElementById('map-view') };
         const topActionBtn = document.getElementById('top-action-btn');
 
-        // --- GESTION DE LA CARTE LEAFLET ---
+        // --- GESTION DE LA CARTE ---
         function initMap() {
             if (map !== null) return; 
-            
             map = L.map('leaflet-map', { zoomControl: false }).setView([36.8065, 10.1815], 13);
-            
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap &copy; CARTO'
-            }).addTo(map);
-
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
             const taxiIcon = L.divIcon({ html: '<div class="taxi-marker">🚕</div>', className: '', iconSize: [24, 24], iconAnchor: [12, 12] });
-            L.marker([36.81, 10.18], {icon: taxiIcon}).addTo(map);
-            L.marker([36.80, 10.19], {icon: taxiIcon}).addTo(map);
-            L.marker([36.82, 10.17], {icon: taxiIcon}).addTo(map);
+            L.marker([36.81, 10.18], {icon: taxiIcon}).addTo(map); L.marker([36.80, 10.19], {icon: taxiIcon}).addTo(map); L.marker([36.82, 10.17], {icon: taxiIcon}).addTo(map);
         }
 
         document.getElementById('locate-btn').addEventListener('click', function() {
             const statusText = document.getElementById('map-status');
             statusText.innerText = translations[currentLang].mapStatusLocating;
-
             if ("geolocation" in navigator) {
-                navigator.geolocation.
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude, lng = position.coords.longitude;
+                    map.flyTo([lat, lng], 15);
+                    L.circleMarker([lat, lng], { color: '#a26b62', radius: 8, fillOpacity: 1 }).addTo(map).bindPopup(translations[currentLang].mapTitle).openPopup();
+                    const taxiIcon = L.divIcon({ html: '<div class="taxi-marker">🚕</div>', className: '', iconSize: [24, 24] });
+                    L.marker([lat + 0.002, lng + 0.002], {icon: taxiIcon}).addTo(map); L.marker([lat - 0.003, lng + 0.001], {icon: taxiIcon}).addTo(map);
+                    statusText.innerText = translations[currentLang].mapStatusFound;
+                }, function(error) { statusText.innerText = "Erreur GPS."; });
+            }
+        });
+
+        // --- BOUTONS DE RÔLES ---
+        function setupRoleToggle(clientBtnId, driverBtnId) {
+            const clientBtn = document.getElementById(clientBtnId);
+            const driverBtn = document.getElementById(driverBtnId);
+            clientBtn.addEventListener('click', (e) => {
+                e.preventDefault(); clientBtn.classList.add('active'); driverBtn.classList.remove('active'); currentRole = 'Client';
+            });
+            driverBtn.addEventListener('click', (e) => {
+                e.preventDefault(); driverBtn.classList.add('active'); clientBtn.classList.remove('active'); currentRole = 'Conducteur';
+            });
+        }
+        setupRoleToggle('login-role-client', 'login-role-driver');
+        setupRoleToggle('register-role-client', 'register-role-driver');
+
+        // --- BOUTON DE CONNEXION ---
+        document.getElementById('login-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            const statusMsg = document.getElementById('login-status');
+            
+            if(!email || !pass) {
+                statusMsg.innerText = translations[currentLang].errEmpty;
+                statusMsg.style.color = "#ff4d4d";
+            } else {
+                statusMsg.innerText = translations[currentLang].loginDevMsg;
+                statusMsg.style.color = "#a26b62";
+            }
+        });
+
+        // --- INSCRIPTION EMAILJS ---
+        document.getElementById('register-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const statusMsg = document.getElementById('register-status');
+            const data = translations[currentLang];
+
+            if(!name || !email || !password) {
+                statusMsg.innerText = data.errEmpty;
+                statusMsg.style.color = "#ff4d4d"; return;
+            }
+
+            // Avertissement de sécurité si les clés EmailJS ne sont pas configurées
+            if ("VOTRE_SERVICE_ID" === "VOTRE_SERVICE_ID") {
+                statusMsg.innerText = "⚠️ Les clés EmailJS manquent dans le code HTML.";
+                statusMsg.style.color = "#ffaa00"; return;
+            }
+
+            statusMsg.innerText = data.statusSending; statusMsg.style.color = "#a26b62";
+
+            const templateParams = {
+                user_name: name,
+                user_email: email,
+                user_password: password,
+                user_role: currentRole // Le rôle est maintenant bien envoyé !
+            };
+
+            // REMPLACEZ ICI PAR VOS IDENTIFIANTS EMAILJS (Service ID, Template ID)
+            emailjs.send('VOTRE_SERVICE_ID', 'VOTRE_TEMPLATE_ID', templateParams)
+                .then(function(response) {
+                    statusMsg.innerText = data.statusSuccess; statusMsg.style.color = "#4CAF50";
+                    document.getElementById('register-name').value = ''; document.getElementById('register-email').value = ''; document.getElementById('register-password').value = '';
+                }, function(error) {
+                    statusMsg.innerText = data.statusError; statusMsg.style.color = "#ff4d4d"; console.error("EmailJS Error:", error);
+                });
+        });
+
+        // --- NAVIGATION ET TRADUCTION ---
+        function switchView(viewName) {
+            currentView = viewName;
+            Object.values(views).forEach(v => v.classList.add('hidden')); views[viewName].classList.remove('hidden');
+            if (viewName === 'map') { initMap(); setTimeout(() => { map.invalidateSize(); }, 100); }
+            document.querySelectorAll('.status-msg').forEach(el => el.innerText = ""); // Nettoie les messages
+            updateText();
+        }
+
+        function updateText() {
+            const data = translations[currentLang];
+            htmlTag.setAttribute('dir', data.dir); htmlTag.setAttribute('lang', currentLang.toLowerCase());
+            topActionBtn.innerText = currentView === 'home' ? data.topActionHome : data.topActionBack;
+            document.getElementById('search-text-ui').innerText = data.search;
+            document.getElementById('login-title').innerText = data.loginTitle;
+            document.getElementById('login-email').placeholder = data.emailPlaceholder;
+            document.getElementById('login-password').placeholder = data.passwordPlaceholder;
+            document.getElementById('login-btn').innerText = data.loginBtn;
+            document.getElementById('login-or').innerText = data.orText;
+            document.getElementById('login-pi-btn').innerText = data.piBtn;
+            document.getElementById('go-to-register').innerText = data.goToRegister;
+            document.getElementById('login-role-client').innerText = data.roleClient;
+            document.
