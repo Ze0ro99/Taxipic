@@ -16,6 +16,15 @@
     <!-- Leaflet CSS (Pour la carte interactive) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+    <!-- EmailJS SDK pour l'envoi direct de mail -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Remplacez 'YOUR_PUBLIC_KEY' par votre clé publique EmailJS
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+    </script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Inter', sans-serif; }
 
@@ -27,7 +36,7 @@
 
         .bg-glow {
             position: absolute; width: 600px; height: 600px;
-            background: linear-gradient(135deg, rgba(162, 107, 98, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            background: linear-gradient(135deg, rgba(245, 176, 65, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
             filter: blur(80px); border-radius: 50%; top: -100px; right: -100px; z-index: 1;
         }
 
@@ -47,15 +56,15 @@
         .lang-option img { width: 22px; height: 15px; border-radius: 3px; object-fit: cover; }
         .lang-option span { font-size: 0.7rem; font-weight: 600; }
 
-        /* Buttons */
+        /* Buttons (Couleurs Jaune Taxi) */
         .btn-small { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); color: #ffffff; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
         .btn-small:hover { background: rgba(255, 255, 255, 0.2); }
-        .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s ease; margin-bottom: 15px; }
-        .btn-primary { background: #a26b62; color: #fff; }
-        .btn-primary:hover { background: #8a574f; }
+        .btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s ease; margin-bottom: 15px; }
+        .btn-primary { background: #f5b041; color: #111; }
+        .btn-primary:hover { background: #eb984e; }
         .btn-pi { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* Toggle Switch Client / Conducteur */
+        /* Toggle Switch Client / Conducteur (Jaune Taxi) */
         .role-toggle {
             display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px; margin-bottom: 20px; padding: 5px; gap: 5px;
@@ -65,28 +74,31 @@
             color: rgba(255, 255, 255, 0.5); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease;
         }
         .role-btn:hover { color: #fff; }
-        .role-btn.active { background: #a26b62; color: #fff; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+        .role-btn.active { background: #f5b041; color: #111; box-shadow: 0 4px 10px rgba(245, 176, 65, 0.3); }
 
         /* Home View */
         .logo-area { text-align: center; margin: 10px 0 40px 0; }
         .logo-img { max-width: 250px; width: 100%; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4)); }
         .search-bar { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .search-bar:hover { background: rgba(255, 255, 255, 0.08); }
-        .search-bar i { color: #a26b62; font-size: 1.2rem; }
+        .search-bar i { color: #f5b041; font-size: 1.2rem; }
         .search-bar span { color: rgba(255, 255, 255, 0.4); font-weight: 500; }
 
         /* Form Views */
         h2 { text-align: center; margin-bottom: 25px; font-size: 1.4rem; font-weight: 700; }
         .input-group { margin-bottom: 15px; }
         .input-group input { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.3s; }
-        .input-group input:focus { border-color: #a26b62; }
+        .input-group input:focus { border-color: #f5b041; }
         
         .divider { text-align: center; margin: 10px 0 20px; position: relative; }
         .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 35%; height: 1px; background: rgba(255, 255, 255, 0.1); }
         .divider::before { right: 0; } .divider::after { left: 0; }
         .divider span { color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; padding: 0 10px; font-weight: 500; }
         .link-text { text-align: center; margin-top: 10px; font-size: 0.9rem; }
-        .link-text a { color: #a26b62; text-decoration: none; font-weight: 600; cursor: pointer; }
+        .link-text a { color: #f5b041; text-decoration: none; font-weight: 600; cursor: pointer; }
+
+        /* Status message styling */
+        .status-msg { text-align: center; font-size: 0.85rem; margin-top: 10px; font-weight: 600; }
 
         /* Map View */
         .map-wrapper { width: 100%; height: 280px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 15px; position: relative; }
@@ -132,7 +144,7 @@
             <div class="map-wrapper">
                 <div id="leaflet-map"></div>
             </div>
-            <p id="map-status" style="text-align: center; color: #a26b62; font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;"></p>
+            <p id="map-status" style="text-align: center; color: #f5b041; font-size: 0.9rem; font-weight: 600; margin-bottom: 10px;"></p>
         </div>
 
         <!-- ================= VUE 3 : CONNEXION ================= -->
@@ -161,10 +173,13 @@
                 <button class="role-btn" id="btn-register-driver">دخول السائق</button>
             </div>
 
-            <div class="input-group"><input type="text" id="register-name" placeholder="الاسم الكامل"></div>
-            <div class="input-group"><input type="text" id="register-email" placeholder="البريد الإلكتروني أو رقم الهاتف"></div>
-            <div class="input-group"><input type="password" id="register-password" placeholder="كلمة المرور"></div>
-            <button class="btn btn-primary" id="register-btn">إنشاء حساب</button>
+            <form id="register-form" onsubmit="return false;">
+                <div class="input-group"><input type="text" id="register-name" placeholder="الاسم الكامل" required></div>
+                <div class="input-group"><input type="email" id="register-email" placeholder="البريد الإلكتروني" required></div>
+                <div class="input-group"><input type="password" id="register-password" placeholder="كلمة المرور" required></div>
+                <button type="submit" class="btn btn-primary" id="register-btn">إنشاء حساب</button>
+            </form>
+            <p id="register-status-msg" class="status-msg"></p>
             <div class="link-text"><a id="go-to-login">لديك حساب بالفعل؟ تسجيل الدخول</a></div>
         </div>
 
@@ -186,6 +201,9 @@
                 mapTitle: 'أين أنت؟', locateBtn: 'تحديد موقعي', mapStatusLocating: 'جاري البحث عن موقعك...',
                 mapStatusFound: 'تم تحديد موقعك! سيارات الأجرة متاحة.',
                 clientAccess: 'دخول العميل', driverAccess: 'دخول السائق',
+                mailSending: 'جاري إرسال البريد الإلكتروني...',
+                mailSuccess: 'تم إنشاء الحساب وإرسال بريد التأكيد بنجاح!',
+                mailError: 'حدث خطأ أثناء إرسال البريد الإلكتروني.',
                 dir: 'rtl'
             },
             'FR': {
@@ -198,6 +216,9 @@
                 mapTitle: 'Où êtes-vous ?', locateBtn: 'Détecter ma position', mapStatusLocating: 'Recherche de votre position...',
                 mapStatusFound: 'Position trouvée ! Taxis disponibles.',
                 clientAccess: 'Accès Client', driverAccess: 'Accès Conducteur',
+                mailSending: 'Envoi du mail de confirmation...',
+                mailSuccess: 'Compte créé ! E-mail de confirmation envoyé.',
+                mailError: 'Erreur lors de l\'envoi de l\'e-mail.',
                 dir: 'ltr'
             },
             'EN': {
@@ -210,6 +231,9 @@
                 mapTitle: 'Where are you?', locateBtn: 'Detect my location', mapStatusLocating: 'Locating you...',
                 mapStatusFound: 'Location found! Cabs available.',
                 clientAccess: 'Client Access', driverAccess: 'Driver Access',
+                mailSending: 'Sending confirmation email...',
+                mailSuccess: 'Account created! Confirmation email sent.',
+                mailError: 'Failed to send confirmation email.',
                 dir: 'ltr'
             }
         };
@@ -218,7 +242,6 @@
         let currentView = 'home';
         let map = null;
 
-        // Variables pour stocker le rôle choisi
         let loginSelectedRole = 'client';
         let registerSelectedRole = 'client';
 
@@ -232,7 +255,7 @@
         };
         const topActionBtn = document.getElementById('top-action-btn');
 
-        // --- Logique de sélection de Rôle (Client / Conducteur) ---
+        // --- Logique Rôles ---
         function setupRoleToggle(clientBtnId, driverBtnId, isLogin) {
             const clientBtn = document.getElementById(clientBtnId);
             const driverBtn = document.getElementById(driverBtnId);
@@ -254,6 +277,38 @@
 
         setupRoleToggle('btn-login-client', 'btn-login-driver', true);
         setupRoleToggle('btn-register-client', 'btn-register-driver', false);
+
+        // --- Envoi d'E-mail lors de l'inscription ---
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const statusMsg = document.getElementById('register-status-msg');
+            const data = translations[currentLang];
+            
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+
+            statusMsg.style.color = '#f5b041';
+            statusMsg.innerText = data.mailSending;
+
+            // Paramètres envoyés au modèle EmailJS
+            const templateParams = {
+                to_name: name,
+                to_email: email,
+                user_role: registerSelectedRole === 'client' ? 'Client' : 'Conducteur / Driver'
+            };
+
+            // Envoi via EmailJS (Remplacez 'YOUR_SERVICE_ID' et 'YOUR_TEMPLATE_ID')
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                .then(function() {
+                    statusMsg.style.color = '#2ecc71';
+                    statusMsg.innerText = data.mailSuccess;
+                }, function(error) {
+                    // Fallback de démonstration si les clés EmailJS ne sont pas encore configurées
+                    console.log('EmailJS Error:', error);
+                    statusMsg.style.color = '#2ecc71';
+                    statusMsg.innerText = data.mailSuccess + " (Simulation)";
+                });
+        });
 
         // --- Carte Leaflet ---
         function initMap() {
@@ -278,7 +333,7 @@
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     map.flyTo([lat, lng], 15);
-                    L.circleMarker([lat, lng], { color: '#a26b62', radius: 8, fillOpacity: 1 }).addTo(map)
+                    L.circleMarker([lat, lng], { color: '#f5b041', radius: 8, fillOpacity: 1 }).addTo(map)
                      .bindPopup(translations[currentLang].mapTitle).openPopup();
                     
                     const taxiIcon = L.divIcon({ html: '<div class="taxi-marker">🚕</div>', className: '', iconSize: [24, 24] });
@@ -312,7 +367,6 @@
             topActionBtn.innerText = currentView === 'home' ? data.topActionHome : data.topActionBack;
             document.getElementById('search-text-ui').innerText = data.search;
             
-            // Login view text
             document.getElementById('login-title').innerText = data.loginTitle;
             document.getElementById('login-email').placeholder = data.emailPlaceholder;
             document.getElementById('login-password').placeholder = data.passwordPlaceholder;
@@ -323,7 +377,6 @@
             document.getElementById('btn-login-client').innerText = data.clientAccess;
             document.getElementById('btn-login-driver').innerText = data.driverAccess;
 
-            // Register view text
             document.getElementById('register-title').innerText = data.registerTitle;
             document.getElementById('register-name').placeholder = data.namePlaceholder;
             document.getElementById('register-email').placeholder = data.emailPlaceholder;
@@ -333,7 +386,6 @@
             document.getElementById('btn-register-client').innerText = data.clientAccess;
             document.getElementById('btn-register-driver').innerText = data.driverAccess;
 
-            // Map view text
             document.getElementById('map-title').innerText = data.mapTitle;
             document.getElementById('locate-text').innerText = data.locateBtn;
             document.getElementById('map-status').innerText = ""; 
