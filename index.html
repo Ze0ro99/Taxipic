@@ -86,6 +86,19 @@
         .search-bar:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 204, 0, 0.3); }
         .search-bar i { color: #FFCC00; font-size: 1.3rem; filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.4)); }
         .search-bar span { color: rgba(255, 255, 255, 0.5); font-weight: 500; font-size: 1.05rem; }
+        .home-intro { text-align: right; margin: -20px 0 18px; }
+        .home-intro .eyebrow { color: #b9a7ff; font-size: .78rem; font-weight: 700; letter-spacing: .04em; margin-bottom: 5px; }
+        .home-intro h1 { font-size: 1.55rem; line-height: 1.35; margin-bottom: 5px; }
+        .home-intro p { color: rgba(255,255,255,.58); font-size: .88rem; line-height: 1.7; }
+        .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+        .service-card { display: flex; flex-direction: column; gap: 8px; padding: 13px 10px; border: 1px solid rgba(255,255,255,.09); border-radius: 15px; background: rgba(255,255,255,.045); color: #fff; text-align: right; cursor: pointer; transition: .25s ease; }
+        .service-card:hover, .service-card:focus-visible { border-color: rgba(185,167,255,.65); background: rgba(125,91,255,.14); transform: translateY(-2px); outline: none; }
+        .service-card i { color: #b9a7ff; font-size: 1.1rem; }
+        .service-card strong { font-size: .82rem; }
+        .service-card small { color: rgba(255,255,255,.48); font-size: .7rem; }
+        .pi-badge { display: inline-flex; align-items: center; gap: 6px; color: #f5d46a; font-size: .75rem; margin-top: 12px; }
+        .pi-badge i { color: #f5d46a; }
+        @media (max-width: 420px) { .container { padding: 22px; } .service-grid { gap: 7px; } .service-card { padding: 11px 8px; } }
 
         /* Forms */
         h2 { text-align: center; margin-bottom: 20px; font-size: 1.4rem; font-weight: 700; }
@@ -134,10 +147,21 @@
             <div class="logo-area">
                 <img src="/taxipic-logo.svg" alt="Taxipic Logo" class="logo-img">
             </div>
-            <div class="search-bar" id="open-map-btn">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <span id="search-text-ui">بحث عن سيارة أجرة...</span>
+            <div class="home-intro">
+                <div class="eyebrow">TAXIPIC على شبكة Pi</div>
+                <h1>تنقّل أسهل، ادفع بعملة Pi</h1>
+                <p>اطلب رحلة موثوقة من متصفّح Pi، وتابع تفاصيلها في مكان واحد.</p>
             </div>
+            <div class="search-bar" id="open-map-btn" role="button" tabindex="0">
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="search-text-ui">ابحث عن رحلة قريبة...</span>
+            </div>
+            <div class="service-grid" aria-label="خدمات Taxipic">
+                <button class="service-card" type="button" data-service="ride"><i class="fa-solid fa-car-side"></i><strong>رحلة</strong><small>اطلب سيارة</small></button>
+                <button class="service-card" type="button" data-service="delivery"><i class="fa-solid fa-box"></i><strong>توصيل</strong><small>أرسل طلبك</small></button>
+                <button class="service-card" type="button" data-service="merchant"><i class="fa-solid fa-store"></i><strong>متجر</strong><small>للتجار</small></button>
+            </div>
+            <div class="pi-badge"><i class="fa-solid fa-circle-nodes"></i><span>مدفوعات Pi الآمنة متاحة داخل Pi Browser</span></div>
         </div>
 
         <!-- ================= VUE 2 : CARTE ================= -->
@@ -344,8 +368,12 @@
         });
 
         topActionBtn.addEventListener('click', function() { if (currentView === 'home') switchView('login'); else switchView('home'); });
-        document.getElementById('open-map-btn').addEventListener('click', () => switchView('map'));
-        document.getElementById('go-to-register').addEventListener('click', () => switchView('register'));
+  const openMap = () => switchView('map');
+  document.getElementById('open-map-btn').addEventListener('click', openMap);
+  document.getElementById('open-map-btn').addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openMap(); } });
+  document.querySelectorAll('[data-service]').forEach((card) => card.addEventListener('click', openMap));
+  document.getElementById('go-to-register').addEventListener('click', () => switchView('register'));
+
         document.getElementById('go-to-login').addEventListener('click', () => switchView('login'));
     </script>
     <script type="module" src="/pi-login.js"></script>
