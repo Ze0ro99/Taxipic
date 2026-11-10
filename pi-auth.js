@@ -8,7 +8,7 @@ export function signInWithPi(pi = window.Pi, request = fetch) {
         await pi.init({ version: '2.0' });
         const { accessToken } = await pi.authenticate(['username'], onIncompletePaymentFound);
         if (!accessToken) throw new Error('Pi did not provide an access token. Please try again.');
-        const response = await request('/api/auth/pi', {
+        const response = await request('https://backend.appstudio-u7cm9zhmha0ruwv8.piappengine.com/pi/auth/v1/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ accessToken }),
