@@ -22,7 +22,7 @@ test('SDK initialization completes before authentication; concurrent clicks exch
     };
     const request = async (url, options) => {
         calls.push('exchange');
-        assert.equal(url, '/api/auth/pi');
+        assert.equal(url, 'https://backend.appstudio-u7cm9zhmha0ruwv8.piappengine.com/pi/auth/v1/login');
         assert.deepEqual(JSON.parse(options.body), { accessToken: 'test-access' });
         return Response.json({ sessionToken: 'test-session', user: { username: 'verified' } });
     };
@@ -84,7 +84,7 @@ test('server trusts only App Studio identity and does not create sessions on fai
 
 test('validation file has the exact requested static response bytes', async () => {
     const file = await readFile(new URL('../public/pi-app-validation.txt', import.meta.url));
-    assert.equal(file.toString(), 'piappstudio-18OUnwGR6ppcOLo1OgvIhRo715GHDkBy');
+    assert.equal(file.toString(), 'piappstudio-YN_3WVcuxxqCWVkx4cVWO5NIx7WWZCb5');
 });
 
 test('subscription renewals stack on the current expiry', async () => {
